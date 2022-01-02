@@ -1477,6 +1477,9 @@ int get_proc_status(int pid, const char *mark)
   {
 
     buf[strlen(buf) - 1] = 0;
+    if (DEBUG) {
+      printf("/proc/status = %s\n", buf);
+    }
     if (strncmp(buf, mark, m) == 0)
     {
       sscanf(buf + m + 1, "%d", &ret);
@@ -1484,6 +1487,8 @@ int get_proc_status(int pid, const char *mark)
   }
   if (pf)
     fclose(pf);
+  else
+    printf("ERROR! open %s failed!", fn);
   return ret;
 }
 
@@ -2679,6 +2684,9 @@ void watch_solution(pid_t pidApp, char *infile, int &ACflg, int isspj,
     else
     { //other use VmPeak
       tempmemory = get_proc_status(pidApp, "VmPeak:") << 10;
+      if (DEBUG) {
+        printf("VmPeak=%d\n", tempmemory);
+      }
     }
     if (tempmemory > topmemory)
       topmemory = tempmemory;
